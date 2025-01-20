@@ -1,0 +1,47 @@
+name: Auto-Update Data
+
+on:
+  schedule:
+    - cron: '0 2,14 * * *'
+  workflow_dispatch:
+  
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the target repository
+        uses: actions/checkout@v2
+        with:
+          repository: St-Pavlov-Foundation/re1999-data
+          token: ${{ secrets.UPDATE_TOKEN }} 
+          path: re1999-data
+
+      - name: Checkout the target repository
+        uses: actions/checkout@v2
+        with:
+          repository: St-Pavlov-Foundation/re1999-depack
+          token: ${{ secrets.DEPACK_TOKEN }} 
+          path: re1999-depack
+
+      - name: Set up python 3.11
+        uses: actions/setup-python@v4
+        with:
+            python-version: '3.11'
+
+      - name: Generate unpacked data
+        id: bin
+        run: |
+          cd re1999-depack
+          pip install -r requirements.txt
+          python main.py -u --data-path ../re1999-data/data
+          echo "version=`python main.py --res-version`" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push changes to the target repository
+        if: steps.bin.outputs.version
+        uses: EndBug/add-and-commit@v9.1.4
+        with:
+          author_name: St. Pavlov [bot]
+          author_email: st.pavlov.bot@users.noreply.github.com
+          message: "${{ steps.bin.outputs.version }}"
+          cwd: "re1999-data"
