@@ -35,8 +35,8 @@ jobs:
           cd re1999-depack
           git submodule update --init
           pip install -r requirements.txt
-          python main.py -u --data-path ../re1999-data/data
-          echo "version=`python main.py --res-version`" >> "$GITHUB_OUTPUT"
+          python main.py --data-path ../re1999-data/data -u
+          echo "version=`python main.py --data-path ../re1999-data/data --res-version`" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push changes to the target repository
         if: steps.bin.outputs.version
