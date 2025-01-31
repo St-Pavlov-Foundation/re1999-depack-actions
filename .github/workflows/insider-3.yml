@@ -1,4 +1,4 @@
-name: Auto-Update Data
+name: Auto-Update Data (insider-2)
 
 on:
   schedule:
@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: St-Pavlov-Foundation/re1999-data
+          ref: insider-3
           token: ${{ secrets.UPDATE_TOKEN }} 
           path: re1999-data
 
@@ -35,7 +36,7 @@ jobs:
         run: |
           cd re1999-depack
           pip install -r requirements.txt
-          python main.py --data-path ../re1999-data/data -u
+          python main.py --server-type 3 --data-path ../re1999-data/data -u
           echo "version=`python main.py --data-path ../re1999-data/data --res-version`" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push changes to the target repository
