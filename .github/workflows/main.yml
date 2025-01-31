@@ -35,7 +35,7 @@ jobs:
         run: |
           cd re1999-depack
           pip install -r requirements.txt
-          python main.py --data-path ../re1999-data/data -u
+          python -u main.py --data-path ../re1999-data/data -u
           echo "version=`python main.py --data-path ../re1999-data/data --res-version`" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push changes to the target repository
