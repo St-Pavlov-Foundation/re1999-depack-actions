@@ -2,7 +2,7 @@ name: Auto-Update Data (global)
 
 on:
   schedule:
-    - cron: '0 2,14 * * *'
+    - cron: '0 10 * * *'
   workflow_dispatch:
   
 jobs:
